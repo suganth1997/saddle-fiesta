@@ -44,13 +44,6 @@ class Incompressible(Scene):
             length_func=lambda x: x,
         ).scale(2)
 
-        arrowChangeExtraField1 = ArrowVectorField(
-            lambda x: arrowChange(x[0]) * RIGHT / 2,
-            x_range=[0.8, 0.8, 0.8],
-            y_range=[-0.75, 0.75, 0.5],
-            length_func=lambda x: x,
-        ).scale(2)
-
         # arrowChangeExtraField2 = ArrowVectorField(
         #     lambda x: arrowChange(x[0]) * RIGHT / 2,
         #     x_range=[1.6, 1.6, 1.6],
@@ -64,17 +57,74 @@ class Incompressible(Scene):
 
         self.play(arrowField.animate.become(arrowChangeField))
 
-        self.play(Create(arrowChangeExtraField1))
+        xDotDomain = np.linspace(-2, 2, 15)
+        dotRep = [
+            Dot([x, 0, 0], DEFAULT_DOT_RADIUS / 2)
+            for x in -0.25 * (xDotDomain**2) + xDotDomain + 1
+        ]
+
+        dotRepCreate = [Create(x) for x in dotRep]
+        dotRepUncreate = [Uncreate(x) for x in dotRep]
 
         # expandDot = Dot(0.75 * LEFT, DEFAULT_DOT_RADIUS / 2)
-        expandDot = Dot([-1, 0, 0], DEFAULT_DOT_RADIUS / 2)
+        # expandDot = Dot([1, 0, 0], DEFAULT_DOT_RADIUS / 2)
 
-        expantPointer = CurvedArrow([-1, 0, 0], [-3, 1, 0])
+        expandPointer = ArcBetweenPoints([1, 0, 0], [3, 1, 0])
+
+        duxdx = (
+            MathTex("\\frac{\\partial u_x}{\\partial x} < 0")
+            .scale(0.75)
+            .move_to([3, 1.5, 0])
+        )
+
+        dudxDisc = MathTex("u_{front} < u_{behind}").scale(0.75).move_to([3.5, 1.5, 0])
+
+        divComp = (
+            MathTex("\\nabla\cdot u < 0 \\Rightarrow \\text{Compression}")
+            .scale(0.75)
+            .move_to([4.2, 1.5, 0])
+        )
+
+        divExp = (
+            MathTex("\\nabla\cdot u > 0 \\Rightarrow \\text{Expansion}")
+            .scale(0.75)
+            .next_to(divComp, DOWN)
+        )
+
+        dotExp = [
+            Dot([x, 0, 0], DEFAULT_DOT_RADIUS / 2)
+            for x in 0.25 * (xDotDomain**2) + xDotDomain - 1
+        ]
+
+        dotExpCreate = [Create(x) for x in dotExp]
+        dotExpUncreate = [Uncreate(x) for x in dotExp]
+
+        arrowChangeExp = lambda x: 0.6 + x / 5
+        arrowExpand = ArrowVectorField(
+            lambda x: arrowChangeExp(x[0]) * RIGHT / 2,
+            x_range=[-1, 0.5, 0.5],
+            y_range=[-0.75, 0.75, 0.5],
+            length_func=lambda x: x,
+        ).scale(2)
 
         # REASONING WRONG, HAVE TO MAKE TWO FIELDS EXPANDING AND COMPRESSING
 
-        self.play(Create(expandDot))
+        self.play(Create(expandPointer))
 
-        self.play(Create(expantPointer))
+        self.play(Write(duxdx))
+
+        self.play(ReplacementTransform(duxdx, dudxDisc))
+
+        self.play(*dotRepCreate)
+
+        self.play(ReplacementTransform(dudxDisc, divComp))
+
+        self.play(*dotRepUncreate, Uncreate(expandPointer))
+
+        self.play(*dotExpCreate, arrowField.animate.become(arrowExpand))
+
+        self.play(Write(divExp))
+
+        self.play(*dotExpUncreate)
 
         self.wait(2)
