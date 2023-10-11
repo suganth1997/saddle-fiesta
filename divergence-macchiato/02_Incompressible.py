@@ -3,18 +3,24 @@ from manim import *
 
 class Incompressible(Scene):
     def construct(self):
-        diverge = MathTex("\\nabla\\cdot\left(\\rho\mathbf{u}\\right) = 0").shift(UP)
+        diverge = MathTex("\\nabla\\cdot", "\\rho", "\mathbf{u} = 0").shift(UP)
 
         self.play(Create(diverge))
         self.wait(2)
 
-        rhoZero = MathTex("\\rho = 0").next_to(diverge, 2 * DOWN)
+        rhoZero = MathTex("\\rho = const").next_to(diverge, 2 * DOWN)
 
         self.play(Create(rhoZero))
         self.wait(2)
 
+        self.play(Uncreate(diverge[1]))
+
         incomp = MathTex("\\nabla\\cdot\mathbf{u} = 0").shift(UP)
-        self.play(ReplacementTransform(Group(diverge, rhoZero), incomp))
+        self.play(diverge[2].animate(run_time=1).next_to(diverge[0], RIGHT))
+        self.wait(2)
+
+        self.play(diverge.animate(run_time=1).shift(UP))
+        self.play(Uncreate(rhoZero))
         self.wait(2)
 
         divexp = MathTex(
@@ -22,14 +28,21 @@ class Incompressible(Scene):
         ).next_to(incomp, DOWN)
 
         self.play(Create(divexp))
-
-        self.play(divexp.animate.move_to(UP * 3), Uncreate(incomp))
+        self.play(Uncreate(diverge))
+        self.play(divexp.animate.move_to(UP * 2.9))
 
         self.wait(2)
 
         domain = Rectangle(width=2).scale(2)
 
         arrowField = ArrowVectorField(
+            lambda x: RIGHT / 2,
+            x_range=[-1, 0.5, 0.5],
+            y_range=[-0.75, 0.75, 0.5],
+            length_func=lambda x: x,
+        ).scale(2)
+
+        arrowField_ = ArrowVectorField(
             lambda x: RIGHT / 2,
             x_range=[-1, 0.5, 0.5],
             y_range=[-0.75, 0.75, 0.5],
@@ -83,6 +96,7 @@ class Incompressible(Scene):
             MathTex("\\nabla\cdot u < 0 \\Rightarrow \\text{Compression}")
             .scale(0.75)
             .move_to([4.2, 1.5, 0])
+            .shift(0.5 * RIGHT)
         )
 
         divExp = (
@@ -91,10 +105,21 @@ class Incompressible(Scene):
             .next_to(divComp, DOWN)
         )
 
+        divIncomp = (
+            MathTex("\\nabla\cdot u = 0 \\Rightarrow \\text{Incompressible}")
+            .scale(0.75)
+            .next_to(divExp, DOWN)
+        )
+
+        divIncompRect = SurroundingRectangle(divIncomp)
+
         dotExp = [
             Dot([x, 0, 0], DEFAULT_DOT_RADIUS / 2)
             for x in 0.25 * (xDotDomain**2) + xDotDomain - 1
         ]
+
+        dotIncomp = [Dot([x, 0, 0], DEFAULT_DOT_RADIUS / 2) for x in xDotDomain]
+        dotIncompCreate = [Create(x) for x in dotIncomp]
 
         dotExpCreate = [Create(x) for x in dotExp]
         dotExpUncreate = [Uncreate(x) for x in dotExp]
@@ -126,5 +151,13 @@ class Incompressible(Scene):
         self.play(Write(divExp))
 
         self.play(*dotExpUncreate)
+
+        self.play(arrowField.animate.become(arrowField_))
+
+        self.play(*dotIncompCreate)
+
+        self.play(Write(divIncomp))
+
+        self.play(Create(divIncompRect))
 
         self.wait(2)
