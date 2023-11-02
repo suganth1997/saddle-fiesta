@@ -1,6 +1,12 @@
 \documentclass{article}
 \begin{document}
 
+\section*{01\_Introduction}
+Consider a volume of particles, fluid, solid or gas, maybe a square volume of material, and material is entering and leaving the volume. A universal truth of nature is that mass is neither created nor destroyed, hence conservation of mass is a important property of an physical system. Then so how do we write it for this system? What can we say about mass conservation for this volume V. One way to constraint this is to see the surface enclosing the volume and saying, the amount of material entering and leaving this volume must be a constant. And for that we need to involve time into the equation which then states the mass flow rate along the surface must be a constant. But mass is not defined point to point but density is, so we can then rewrite the equation in terms of density and the velocity by dotting with the normal to the surface. Then there is a beautiful person in history called Gauss and he has written a theorem called the divergence theorem which we can then use to turn the surface integral into a volume integral, then we can basically use the equation for mass conservation pointwise in the whole of our domain.
+
+\section*{02\_Incompressible}
+Okay now let us consider the mass conservation equation, and even simplified with the incompressible case, where we consider the density to be a constant. Then we can remove density from the equation and results in simply divergence of velocity is zero. Let us expand the divergence term and think about what it means exactly. The sum of partial derivative of velocity in x direction with respect to the x coordinate and the derivative of velocity in y direction with respect to the y coordinate must be zero. Let us see this with a simple field, where the particles are moving in the x direction. Now make the velocities in such a way that the particles slow down in the direction of their movement. This makes the particles in the front to get accumulated and the particles from behind to crush against the particles in the front. Hence in this sense, if the divergence is negative then the material is compressed. Whereas in the same manner, if the particles are accelerating in the sense that the particles in the front are moving faster than behind, results in positive divergence, then the material is under expansion. And consequently if the divergence is zero then the material is in an incompressible state.
+
 Intro with some funny story about a date with CFD chick
 
 Mass conservation

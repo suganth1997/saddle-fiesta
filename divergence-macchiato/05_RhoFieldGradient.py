@@ -173,7 +173,7 @@ class RhoField(ThreeDScene):
                     np.array([cos(theta.get_value()), sin(theta.get_value())]),
                 )
             ),
-        ).next_to(gradRhoArrow, RIGHT + 2 * DOWN)
+        ).next_to(gradRhoArrow, -1 * RIGHT + 2 * DOWN)
 
         gradRhodotu.add_updater(
             lambda x: x.become(
@@ -185,7 +185,7 @@ class RhoField(ThreeDScene):
                             np.array([cos(theta.get_value()), sin(theta.get_value())]),
                         )
                     ),
-                ).next_to(gradRhoArrow, RIGHT + 2 * DOWN)
+                ).next_to(gradRhoArrow, -1 * RIGHT + 2 * DOWN)
             )
         )
 
@@ -244,8 +244,25 @@ class RhoField(ThreeDScene):
 
         self.wait(PI / 2)
 
-        self.play(theta.animate.set_value(PI), run_time=2.0)
-        self.play(theta.animate.set_value(2 * PI), run_time=2.0)
+        self.play(theta.animate.set_value(PI), run_time=3.0)
+        self.play(theta.animate.set_value(2 * PI), run_time=3.0)
+
+        gradRhodotu.add_updater(
+            lambda x: x.become(
+                MathTex(
+                    "\\nabla\\cdot u = ",
+                    "{:.2f}".format(
+                        -np.dot(
+                            np.array([-1, -1]) / sqrt(2),
+                            np.array([cos(theta.get_value()), sin(theta.get_value())]),
+                        )
+                    ),
+                ).next_to(gradRhoArrow, -1 * RIGHT + 2 * DOWN)
+            )
+        )
+
+        self.play(theta.animate.set_value(PI / 4), run_time=3.0)
+        self.play(theta.animate.set_value(5 * PI / 4), run_time=3.0)
 
         # self.add_fixed_in_frame_mobjects(divuChainRes)
         # self.play(ReplacementTransform(divuChain, divuChainRes))
