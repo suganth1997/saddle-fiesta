@@ -5,23 +5,26 @@
 Consider a volume of particles, fluid, solid or gas, maybe a square volume of material, and material is entering and leaving the volume. A universal truth of nature is that mass is neither created nor destroyed, hence conservation of mass is a important property of an physical system. Then so how do we write it for this system? What can we say about mass conservation for this volume V. One way to constraint this is to see the surface enclosing the volume and saying, the amount of material entering and leaving this volume must be a constant. And for that we need to involve time into the equation which then states the mass flow rate along the surface must be a constant. But mass is not defined point to point but density is, so we can then rewrite the equation in terms of density and the velocity by dotting with the normal to the surface. Then there is a beautiful person in history called Gauss and he has written a theorem called the divergence theorem which we can then use to turn the surface integral into a volume integral, then we can basically use the equation for mass conservation pointwise in the whole of our domain.
 
 \section*{02\_Incompressible}
-Okay now let us consider the mass conservation equation, and even simplified with the incompressible case, where we consider the density to be a constant. Then we can remove density from the equation and results in simply divergence of velocity is zero. Let us expand the divergence term and think about what it means exactly. The sum of partial derivative of velocity in x direction with respect to the x coordinate and the derivative of velocity in y direction with respect to the y coordinate must be zero. Let us see this with a simple field, where the particles are moving in the x direction. Now make the velocities in such a way that the particles slow down in the direction of their movement. This makes the particles in the front to get accumulated and the particles from behind to crush against the particles in the front. Hence in this sense, if the divergence is negative then the material is compressed. Whereas in the same manner, if the particles are accelerating in the sense that the particles in the front are moving faster than behind, results in positive divergence, then the material is under expansion. And consequently if the divergence is zero then the material is in an incompressible state.
+Okay now let us consider the mass conservation equation, and even simplified, let's become engineers and assume density is constant with the incompressible case, where we consider the density to be a constant. Then we can remove density from the equation and results in simply divergence of velocity is zero. Let us expand the divergence term and think about what it means exactly. The sum of partial derivative of velocity in x direction with respect to the x coordinate and the derivative of velocity in y direction with respect to the y coordinate must be zero. Let us see this with a simple field, where the particles are moving in the x direction. Now make the velocities in such a way that the particles slow down in the direction of their movement. This makes the particles in the front to get accumulated and the particles from behind to crush against the particles in the front. Hence in this sense, if the divergence is negative then the material is compressed. Whereas in the same manner, if the particles are accelerating in the sense that the particles in the front are moving faster than behind, results in positive divergence, then the material is under expansion. And consequently if the divergence is zero then the material is in an incompressible state.
 
-Intro with some funny story about a date with CFD chick
+\section*{03\_VectorField2D}
+But in one dimension things are quite clear, but what this means in two dimension, from a thermodynamics view point, a source has a positive divergence and a sink has a negative divergence, and if the mass distribution does not change in the whole volume, then we have zero divergence. But what this means mathematically is that, if you consider a small circle around any point in the volume and map the amount of fluid entering and leaving that small circle, must be the same in the case of zero divergence. My guru Grant Sanderson has a better video about this as well. This divergence free condition is frequently used as an extra constraint when solving fluid dynamic equations such as the Navier Stokes equations. So that the resulting velocity field conserves mass of the fluid which could be incompressible or compressible. This atleast makes the incompressible zero divergence a bit better to understand but what is the compressible mass conservation telling. Using the same argument as above, it somehow says the mass of fluid entering the circle or the volume must be same as the mass of fluid leaving the circle or the volume as opposed to before where we said the amount (or volume) of the fluid entering and leaving must be the same. But let us try to see this from an even better perspective.
 
-Mass conservation
+% Intro with some funny story about a date with CFD chick
 
-Explain divergence, with vector spaces, accelarating field and decelarating fields
+% Mass conservation
 
-Compressible case, 1D is intuitive, 2D is highly non intuitive.
-But what does the rho say, we have already established divergence less than zero is compressible so it must be related to that sense somehow, but how?
+% Explain divergence, with vector spaces, accelarating field and decelarating fields
 
-Chain rule, explain grad rho and dot product
+% Compressible case, 1D is intuitive, 2D is highly non intuitive.
+% But what does the rho say, we have already established divergence less than zero is compressible so it must be related to that sense somehow, but how?
 
-Example with earth kind of scenario?
+% Chain rule, explain grad rho and dot product
+
+% Example with earth kind of scenario?
 
 
 
-To understand divergence better, let's become engineers and assume density is constant!
+% To understand divergence better, let's become engineers and assume density is constant!
 
 \end{document}
