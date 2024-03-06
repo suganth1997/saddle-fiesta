@@ -100,6 +100,22 @@ class RhoField(ThreeDScene):
             )
         )
 
+        # pointField = []
+
+        # px = -3.0
+        # while px < 3.0:
+        #     py = -3.0
+        #     while py < 0.0:
+        #         pointField.append(Dot([py, px, 0.0], DEFAULT_DOT_RADIUS / 10))
+        #         pointField.append(Dot([-py, px, 0.0], DEFAULT_DOT_RADIUS / 10))
+        #         dpy = 0.25 / np.linalg.norm(rhoFunc([py, px, 0.0]))
+        #         py += dpy
+            
+        #     dpx = 0.25 / np.linalg.norm(rhoFunc([px, 0.0, 0.0]))
+        #     px += dpx
+
+        # pointField = VGroup(*pointField)
+
         divuText = MathTex("\\nabla\\cdot\\rho u = 0").to_corner(UR)
 
         divuChain = (
@@ -189,6 +205,12 @@ class RhoField(ThreeDScene):
             )
         )
 
+        n = 256
+        colorbar = np.uint8(
+            [[i * 256 / n for i in range(0, n)] for _ in range(0, 10)]
+        )
+        colorbar = ImageMobject(colorbar).shift(6 * UP)
+
         # self.set_camera_orientation(
         #     75 * DEGREES, -30 * DEGREES, frame_center=[1.0, 0.0, 0.0]
         # )
@@ -210,7 +232,11 @@ class RhoField(ThreeDScene):
 
         self.play(t.animate.set_value(1.0), run_time=PI / 2)
 
+        self.add(colorbar)
+
         self.wait(PI / 2)
+
+        return
 
         self.play(planeOp.animate.set_value(1.0), run_time=PI / 2)
 
@@ -264,6 +290,13 @@ class RhoField(ThreeDScene):
         self.play(theta.animate.set_value(PI / 4), run_time=3.0)
         self.play(theta.animate.set_value(5 * PI / 4), run_time=3.0)
 
+        self.play(fieldOpacity.animate.set_value(1.0), run_time=2)
+
+        self.move_camera(0.0, 0.0)
+
+        self.wait(PI / 2)
+
+        self.play(fieldOpacity.animate.set_value(1.0), run_time=2)
         # self.add_fixed_in_frame_mobjects(divuChainRes)
         # self.play(ReplacementTransform(divuChain, divuChainRes))
 
