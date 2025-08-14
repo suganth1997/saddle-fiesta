@@ -18,14 +18,8 @@ class Compressible(Scene):
             # + 1.0  # cos((x[1] + 3) * PI / 6) ** 2
         )
 
-        divFrFunc = (
-            lambda x: (
-                -10 * (-50 * x[0] - 250) * exp(-25 * (x[0] + 5) ** 2)
-                - 10 * (-50 * x[0] - 100) * exp(-25 * (x[0] + 2) ** 2)
-            )
-            * cos(2 * x[1])
-            / (1 + 10 * exp(-25 * (x[0] + 5) ** 2) + 10 * exp(-25 * (x[0] + 2) ** 2))
-            ** 2
+        divFrFunc = lambda x: 10 * exp(-25.0 * (x[0] + 1.75) ** 2) + 10 * exp(
+            -25.0 * (x[0] + 4.75) ** 2
         )
 
         weirdField = ArrowVectorField(
@@ -37,9 +31,8 @@ class Compressible(Scene):
         def vecFieldFunc(pos):
             return (
                 np.array([cos(2 * pos[1]), sin(2 * pos[0]), 0.0])
-                # np.array([5.0, 0.0])
                 * vecScale
-                / (1.0 * (1 - t.get_value()) + t.get_value() * rhoFunc(pos))
+                / (1.0 * (1.0 - t.get_value()) + t.get_value() * rhoFunc(pos))
             )
 
         dx = 0.25
@@ -108,11 +101,18 @@ class Compressible(Scene):
             )
         )
 
-        divText = MathTex(
-            "\\nabla\\cdot u = {}".format(
-                round(divFrFunc(cl.get_value() * LEFT + cu.get_value() * UP))
+        divText = (
+            MathTex(
+                "\\nabla\\cdot u = {}".format(
+                    round(divFrFunc(cl.get_value() * LEFT + cu.get_value() * UP))
+                )
             )
-            # "\\nabla\\cdot u = {}".format(round(rhoFunc(circleOnField.get_center())))
+            .scale(0.75)
+            .shift(1 * RIGHT + UP)
+        )
+
+        compDivText = (
+            MathTex("\\nabla\\cdot \\rho u = 0").scale(0.75).next_to(divText, DOWN)
         )
 
         divText.add_updater(
@@ -121,10 +121,15 @@ class Compressible(Scene):
                     "\\nabla\\cdot u = {}".format(
                         round(divFrFunc(circleOnField.get_center()))
                     )
-                    # "\\nabla\\cdot u = {}".format(
-                    #     round(rhoFunc(circleOnField.get_center()))
-                    # )
                 )
+                .scale(0.75)
+                .shift(1 * RIGHT + UP)
+            )
+        )
+
+        compDivText.add_updater(
+            lambda x: x.become(
+                MathTex("\\nabla\\cdot \\rho u = 0").scale(0.75).next_to(divText, DOWN)
             )
         )
 
@@ -141,6 +146,7 @@ class Compressible(Scene):
         self.play(Create(circleOnField))
 
         self.play(Write(divText))
+        self.play(Write(compDivText))
 
         # self.play(FadeOut(weirdField))
         # self.play(FadeIn(compressibleField))

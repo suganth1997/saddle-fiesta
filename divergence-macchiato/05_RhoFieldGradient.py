@@ -116,6 +116,8 @@ class RhoField(ThreeDScene):
 
         # pointField = VGroup(*pointField)
 
+        rhoFieldText = MathTex("\\rho\\text{-field}").to_corner(UL)
+
         divuText = MathTex("\\nabla\\cdot\\rho u = 0").to_corner(UR)
 
         divuChain = (
@@ -182,7 +184,7 @@ class RhoField(ThreeDScene):
         )
 
         gradRhodotu = MathTex(
-            "\\frac{\\nabla\\cdot\\rho}{\\rho}\\cdot u = ",
+            "\\frac{\\nabla\\rho}{\\rho}\\cdot u = ",
             "{:.2f}".format(
                 np.dot(
                     np.array([-1, -1]) / sqrt(2),
@@ -194,7 +196,7 @@ class RhoField(ThreeDScene):
         gradRhodotu.add_updater(
             lambda x: x.become(
                 MathTex(
-                    "\\frac{\\nabla\\cdot\\rho}{\\rho}\\cdot u = ",
+                    "\\frac{\\nabla\\rho}{\\rho}\\cdot u = ",
                     "{:.2f}".format(
                         np.dot(
                             np.array([-1, -1]) / sqrt(2),
@@ -209,7 +211,10 @@ class RhoField(ThreeDScene):
         colorbar = np.uint8(
             [[i * 256 / n for i in range(0, n)] for _ in range(0, 10)]
         )
-        colorbar = ImageMobject(colorbar).shift(6 * UP)
+        colorbar = ImageMobject(colorbar).shift(6 * DOWN)
+
+        colorbarText0 = MathTex("0").rotate(PI/2).move_to(colorbar.get_top()).shift(1.5*LEFT)
+        colorbarText1 = MathTex("1").rotate(PI/2).move_to(colorbar.get_top()).shift(1.5*RIGHT)
 
         # self.set_camera_orientation(
         #     75 * DEGREES, -30 * DEGREES, frame_center=[1.0, 0.0, 0.0]
@@ -232,11 +237,9 @@ class RhoField(ThreeDScene):
 
         self.play(t.animate.set_value(1.0), run_time=PI / 2)
 
-        self.add(colorbar)
+        # self.add(colorbar)
 
         self.wait(PI / 2)
-
-        return
 
         self.play(planeOp.animate.set_value(1.0), run_time=PI / 2)
 
@@ -246,13 +249,21 @@ class RhoField(ThreeDScene):
 
         self.wait(PI / 2)
 
+        # self.play(Write(rhoFieldText), FadeIn(colorbar), Create(colorbarText0), Create(colorbarText1))
+
+        self.add_fixed_in_frame_mobjects(rhoFieldText)
+        self.play(Write(rhoFieldText))
+
         self.add_fixed_in_frame_mobjects(divuText)
         self.play(Write(divuText))
 
         self.add_fixed_in_frame_mobjects(divuChain)
         self.play(Write(divuChain))
 
-        # self.play(FadeOut(compressibleField))
+        self.add_fixed_in_frame_mobjects(divuChainRes)
+        self.play(Write(divuChainRes))
+
+        # self.play(FadeOut(compressibleField))divuChainRes
         self.play(fieldOpacity.animate.set_value(0.0), run_time=2)
 
         self.play(Create(gradArrow))
@@ -290,13 +301,18 @@ class RhoField(ThreeDScene):
         self.play(theta.animate.set_value(PI / 4), run_time=3.0)
         self.play(theta.animate.set_value(5 * PI / 4), run_time=3.0)
 
-        self.play(fieldOpacity.animate.set_value(1.0), run_time=2)
+        # self.play(fieldOpacity.animate.set_value(1.0), run_time=2)
 
-        self.move_camera(0.0, 0.0)
+        # self.move_camera(0.0, 0.0)
 
-        self.wait(PI / 2)
+        # self.wait(PI / 2)
 
-        self.play(fieldOpacity.animate.set_value(1.0), run_time=2)
+        # self.play(fieldOpacity.animate.set_value(1.0), run_time=2)
+
+        # self.wait(PI / 2)
+
+        # self.wait(PI / 2)
+
         # self.add_fixed_in_frame_mobjects(divuChainRes)
         # self.play(ReplacementTransform(divuChain, divuChainRes))
 
