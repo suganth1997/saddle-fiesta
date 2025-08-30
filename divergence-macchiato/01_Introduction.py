@@ -8,6 +8,10 @@ class Introduction(Scene):
         #     func, x_range=[-7, 7, 1], y_range=[-4, 4, 1], length_func=lambda x: x / 2
         # )
         # self.play(FadeIn(vector_field))
+        
+        title = Tex("Conservation of Mass").to_corner(LEFT + UP)
+
+        self.play(Create(title))
 
         domain = Rectangle(width=2)
 
