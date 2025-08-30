@@ -86,8 +86,6 @@ class Introduction(Scene):
         )
         self.wait(4)
 
-        return
-
         diverge = MathTex("\\nabla\\cdot\left(\\rho\mathbf{u}\\right) = 0").shift(UP)
 
         self.play(Create(diverge))

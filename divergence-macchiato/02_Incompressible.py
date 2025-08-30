@@ -3,9 +3,13 @@ from manim import *
 
 class Incompressible(Scene):
     def construct(self):
+
+        compressibleText = Tex("Conservation of Mass ", "(Compressible case)").to_corner(LEFT + UP)
+        incompressibleText = Tex("Conservation of Mass ", "(Incompressible case)").to_corner(LEFT + UP)
+
         diverge = MathTex("\\nabla\\cdot", "\\rho", "\mathbf{u} = 0").shift(UP)
 
-        self.play(Create(diverge))
+        self.play(Create(diverge), Create(compressibleText))
         self.wait(2)
 
         rhoZero = MathTex("\\rho = const").next_to(diverge, 2 * DOWN)
@@ -13,13 +17,13 @@ class Incompressible(Scene):
         self.play(Create(rhoZero))
         self.wait(2)
 
-        self.play(Uncreate(diverge[1]))
+        self.play(Uncreate(diverge[1]), Uncreate(compressibleText[1]))
 
         incomp = MathTex("\\nabla\\cdot\mathbf{u} = 0").shift(UP)
-        self.play(diverge[2].animate(run_time=1).next_to(diverge[0], RIGHT))
+        self.play(diverge[2].animate(run_time=1).next_to(diverge[0], RIGHT), Create(incompressibleText[1]))
         self.wait(2)
 
-        self.play(diverge.animate(run_time=1).shift(UP))
+        self.play(diverge.animate(run_time=1).shift(UP), Uncreate(compressibleText[0]), Uncreate(incompressibleText[1]))
         self.play(Uncreate(rhoZero))
         self.wait(2)
 

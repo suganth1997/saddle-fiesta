@@ -32,13 +32,13 @@ class Compressible(Scene):
             return (
                 np.array([cos(2 * pos[1]), sin(2 * pos[0]), 0.0])
                 * vecScale
-                / (1.0 * (1.0 - t.get_value()) + t.get_value() * rhoFunc(pos))
+                / (1.0 * (1.0 - t.get_value()) + t.get_value() / rhoFunc(pos))
             )
 
         dx = 0.25
 
         compressibleField = ArrowVectorField(
-            vecFieldFunc, x_range=[-7, 0, dx], y_range=[-3, 3, dx]
+            vecFieldFunc, x_range=[-7, 0, dx], y_range=[-3, 2.25, dx]
         )
 
         compressibleField.add_updater(
@@ -46,7 +46,7 @@ class Compressible(Scene):
                 ArrowVectorField(
                     vecFieldFunc,
                     x_range=[-7, 0, dx],
-                    y_range=[-3, 3, dx],
+                    y_range=[-3, 2.25, dx],
                 )
             )
         )
@@ -59,7 +59,7 @@ class Compressible(Scene):
         Xs = np.linspace(0.5, 7.5, 100)
         Ys = np.linspace(-3, 3, 100)
 
-        ctr = 4 * RIGHT
+        ctr = 4 * RIGHT + 0.25 * DOWN
 
         rho = np.uint(
             # ((np.sin(X) ** 2 + 0.0 * np.sin(Y) ** 2))
@@ -82,7 +82,7 @@ class Compressible(Scene):
         rhoImg = ImageMobject(rho).move_to(ctr)
         # rhoImg = ImageMobject(np.uint8([[0, 100, 30, 200], [255, 0, 5, 33]]))
         rhoImg.width = 7
-        rhoImg.height = 6
+        rhoImg.height = 5
 
         r = 0.25
 
@@ -133,15 +133,22 @@ class Compressible(Scene):
             )
         )
 
+        velocityFieldText = Tex("Velocity $(\\vec{u})$").to_corner(UP+LEFT)
+        velocityRhoFieldText = Tex("Velocity $\\times$ Density $(\\rho\\vec{u})$").to_corner(UP+LEFT)
+        densityFieldText = Tex("Density $(\\rho)$").to_corner(UP).shift(1.5 * RIGHT)
+
+        self.play(Create(velocityFieldText))
         self.play(FadeIn(compressibleField))
         self.wait(2)
 
         # config.disable_caching = True
 
+        self.play(Create(densityFieldText))
         self.play(FadeIn(rhoImg))
         self.wait(2)
 
-        self.play(t.animate.set_value(1.0), run_time=2)
+        self.play(Uncreate(velocityFieldText))
+        self.play(Create(velocityRhoFieldText), t.animate.set_value(1.0), run_time=2)
 
         self.play(Create(circleOnField))
 
